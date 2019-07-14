@@ -25,6 +25,9 @@ def getClubMembers(ClubID, Platform):
 	#print(PlayerData[0]["name"])
 	return PlayerData
 	
+def getClubStats(ClubName, Platform):
+	pass
+	
 def getClubMembersNames(ClubID, Platform):
 	Data = getClubMembers(ClubID,Platform)
 	Names = []
@@ -51,5 +54,28 @@ def findPlayerStats(BlazeID, Name, Platform):
 	playerData = footballData[Key]
 	string = "Name: " + Name + "\n" + "Pro Pos:" + str(playerData["proPos"]) + "\n" + "Favourite Position:" + str(playerData["favoritePosition"]) + "\n" + "Games Played:" + str(playerData["gamesPlayed"]) + "\n"
 	string = string + "Goals:" + str(playerData["goals"]) + "\n" + "Assists:" + str(playerData["assists"]) + "\n" + "Man of the Match:" + str(playerData["manOfTheMatch"]) + "\n" + "Average Rating:" + str(playerData["ratingAve"])
+	print(string)
 	return string
 	
+def findPlayerClubStats(Name,ClubName, Platform):
+	BlazeID = findPlayerBlazeID(Name, ClubName, Platform)
+	ClubID = findClubID(ClubName,Platform)
+	json_url = urllib.request.urlopen("https://www.easports.com/iframe/fifa17proclubs/api/platforms/" + Platform + "/clubs/"+ str(ClubID) +"/members/'" + BlazeID + "'/stats")
+	print("https://www.easports.com/iframe/fifa17proclubs/api/platforms/" + Platform + "/clubs/"+ str(ClubID) +"/members/'" + BlazeID + "'/stats")
+	data = json.loads(json_url.read())
+	footballData = data["raw"]
+	Key = str(list(footballData.keys())[0])
+	playerData = footballData[Key]
+	string = "Pro Name: " + playerData["proName"] + "\n"
+	string = string + "Overall: " + playerData["proOverall"] + "\n"
+	string = string + "Games Played: " + playerData["gamesPlayed"] + "\n"
+	string = string + "Win Rate: " + playerData["winRate"] + "\n"
+	string = string + "Goals: " + playerData["goals"] + "\n"
+	string = string + "Assists: " + playerData["assists"] + "\n"
+	string = string + "Pass Success Rate: " + playerData["passSuccessRate"] + "%\n"
+	string = string + "Tackles Made: " + playerData["tacklesMade"] + "\n"
+	string = string + "tackleSuccessRate: " + playerData["tackleSuccessRate"] + "%\n"
+	string = string + "Man of the Match: " + playerData["manOfTheMatch"] + "\n"
+	string = string + "Red Cards: " + playerData["redCards"] + "\n"
+	print(string)
+	return string
